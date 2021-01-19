@@ -31,8 +31,14 @@ def is_digit(user_input_number):
     # '''
     # ===Modify codes below=============
     # 조건에 따라 변환되어야 할 결과를 result 변수에 할당
-    result = None
 
+    # str.isdigit() 메서드 사용없이 예외처리로 구현
+    result = True
+    try :
+        for s in user_input_number :
+            int(s)
+    except :
+        result = False
     # ==================================
     return result
 
@@ -58,8 +64,8 @@ def is_between_100_and_999(user_input_number):
     # '''
     # ===Modify codes below=============
     # 조건에 따라 변환되어야 할 결과를 result 변수에 할당
-    result = None
 
+    result = int(user_input_number) >= 100 and int(user_input_number) < 1000
     # ==================================
     return result
 
@@ -87,9 +93,10 @@ def is_duplicated_number(three_digit):
     # ===Modify codes below=============
     # 조건에 따라 변환되어야 할 결과를 result 변수에 할당
 
-    result = None
+    result = len(set(three_digit)) < 3
     # ==================================
     return result
+    
 
 
 def is_validated_number(user_input_number):
@@ -115,7 +122,7 @@ def is_validated_number(user_input_number):
     # ===Modify codes below=============
     # 조건에 따라 변환되어야 할 결과를 result 변수에 할당
 
-    result = None
+    result = is_digit(user_input_number) and is_between_100_and_999(user_input_number) and not is_duplicated_number(user_input_number)
     # ==================================
     return result
 
@@ -142,7 +149,9 @@ def get_not_duplicated_three_digit_number():
     # 조건에 따라 변환되어야 할 결과를 result 변수에 할당
     # get_random_number() 함수를 사용하여 random number 생성
 
-    result = None
+    result = get_random_number()
+    while is_duplicated_number(result) :
+        result = get_random_number()
     # ==================================
     return result
 
@@ -175,7 +184,12 @@ def get_strikes_or_ball(user_input_number, random_number):
     # ===Modify codes below=============
     # 조건에 따라 변환되어야 할 결과를 result 변수에 할당
 
-    result = None
+    result = [0, 0]
+    for i in range(3) :
+        if user_input_number[i] == random_number[i] :
+            result[0] += 1
+        elif user_input_number[i] in random_number :
+            result[1] += 1
     # ==================================
     return result
 
@@ -207,7 +221,10 @@ def is_yes(one_more_input):
     # ===Modify codes below=============
     # 조건에 따라 변환되어야 할 결과를 result 변수에 할당
 
-    result = None
+    if one_more_input.upper() == 'Y' or one_more_input.upper() == 'YES' :
+        result = True
+    else :
+        result = False
     # ==================================
     return result
 
@@ -239,7 +256,10 @@ def is_no(one_more_input):
     # ===Modify codes below=============
     # 조건에 따라 변환되어야 할 결과를 result 변수에 할당
 
-    result = None
+    if one_more_input.upper() == 'N' or one_more_input.upper() == 'NO' :
+        result = True
+    else :
+        result = False
     # ==================================
     return result
 
@@ -251,8 +271,35 @@ def main():
     print("Random Number is : ", random_number)
     # ===Modify codes below=============
     # 위의 코드를 포함하여 자유로운 수정이 가능함
-
-
+    tmp = [0, 0]
+    while user_input != '0' :
+        user_input = input('Input guess number : ')
+        # 입력값이 조건에 맞지 않는 경우
+        if not is_validated_number(user_input) :
+            # 만약 0인 경우 아래를 실행하지 않음
+            if user_input == '0' :
+                continue
+            print('Wrong Input, Input again')
+        # 조건에 부합하는 경우 [strike, ball] 표시
+        else :
+            tmp = get_strikes_or_ball(user_input, random_number)
+            print(f"Strikes : {tmp[0]} , Balls : {tmp[1]}")
+        
+        # three strike인 경우 종료조건 확인
+        while tmp[0] == 3 :
+            restart_question = input('You win, one more(Y/N)?')
+            # 지속 할 경우 변수 초기화
+            if is_yes(restart_question) :
+                user_input = 999
+                tmp = [0, 0]
+                break
+            # 끝낼 경우 종료 조건으로 초기화
+            elif is_no(restart_question) :
+                user_input = 0
+                break
+            # 입력값이 조건에 맞지 않는 경우
+            else :
+                print('Wrong Input, Input again')
     # ==================================
     print("Thank you for using this program")
     print("End of the Game")
