@@ -295,7 +295,7 @@ def main():
                 break
             # 끝낼 경우 종료 조건으로 초기화
             elif is_no(restart_question) :
-                user_input = 0
+                user_input = '0'
                 break
             # 입력값이 조건에 맞지 않는 경우
             else :
