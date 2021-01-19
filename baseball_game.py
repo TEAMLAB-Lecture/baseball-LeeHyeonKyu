@@ -290,6 +290,8 @@ def main():
             restart_question = input('You win, one more(Y/N)?')
             # 지속 할 경우 변수 초기화
             if is_yes(restart_question) :
+                random_number = str(get_not_duplicated_three_digit_number())
+                print("Random Number is : ", random_number)
                 user_input = 999
                 tmp = [0, 0]
                 break
